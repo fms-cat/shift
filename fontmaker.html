@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+<title></title>
+
+<body>
+  <div id="container">
+  </div>
+</body>
+
+<script>
+let state = new Array( 25 );
+let els = new Array( 25 );
+state.fill( false );
+
+let box = document.createElement( "input" );
+container.appendChild( box );
+box.style.position = "absolute";
+box.style.top = "510px";
+
+box.onkeydown = ( event ) => {
+  if ( event.which === 13 ) {
+    let val = parseInt( box.value );
+    state = state.map( ( no, ind ) => {
+      let b = ( val >> ind ) & 1;
+      els[ ind ].style.background = b ? "#000" : "#fff";
+      return !!b;
+    } );
+  }
+}
+
+for ( let i = 0; i < 25; i ++ ) {
+  let el = document.createElement( "div" );
+  container.appendChild( el );
+  els[ i ] = el;
+
+  el.style.position = "absolute";
+  el.style.left = ( i % 5 ) * 100 + "px";
+  el.style.top = ( 4 - ~~( i / 5 ) ) * 100 + "px";
+  el.style.width = "96px";
+  el.style.height = "96px";
+  el.style.background = "#fff";
+  el.onclick = () => {
+    state[ i ] = !state[ i ];
+    el.style.background = state[ i ] ? "#000" : "#fff";
+    let val = state.reduce( ( num, val, ind ) => { return num + ( val ? 1 << ind : 0 ); }, 0 );
+    box.value = val;
+  };
+}
+</script>
